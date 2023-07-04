@@ -50,9 +50,7 @@ class MainActivity : AppCompatActivity() {
         println(
             "Multiplicación de los elementos $num1 * $num2 = ${
                 calculadora(
-                    num1,
-                    num2,
-                    ::multiplicar
+                    num1, num2, ::multiplicar
                 )
             }"
         )
@@ -81,35 +79,27 @@ class MainActivity : AppCompatActivity() {
         println("Resta de los elementos 35 - 22 = ${calculadora(35, 22, funcionLambda)}")
 
         //Ahora podemos realizar operaciones sin necesidad de tener estas expresiones almacenadas en ninguna variable
-        println(
-            "Multiplicación de los elementos $num1 * $num2 = ${
-                calculadora(
-                    num1,
-                    num2
-                ) { x: Int, y: Int -> x * y }
-            }"
-        )
-        println(
-            "División de los elementos $num1 / $num2 = ${
-                calculadora(
-                    num1,
-                    num2
-                ) { num1, num2 -> num1 / num2 }
-            }"
-        )
+        println("Multiplicación de los elementos $num1 * $num2 = ${
+            calculadora(
+                num1, num2
+            ) { x: Int, y: Int -> x * y }
+        }")
+        println("División de los elementos $num1 / $num2 = ${
+            calculadora(
+                num1, num2
+            ) { num1, num2 -> num1 / num2 }
+        }")
 
         //Podemos extender estas expresiones para operaciones mas complejas, con variables
         // anonimas, grupos de instrucciones y se pueden poner fuera del parentesis entre dos llaves
-        println(
-            "La potencia de  $num1 elevado a $num2 = ${
-                calculadora(num1, num2) { x, y ->
-                    var valor = 1
-                    for (i in 1..y) valor *= x
+        println("La potencia de  $num1 elevado a $num2 = ${
+            calculadora(num1, num2) { x, y ->
+                var valor = 1
+                for (i in 1..y) valor *= x
 
-                    valor
-                }
-            }"
-        )
+                valor
+            }
+        }")
 
         //MANIPULACIÓN DEL CÓDIGO DE LAMBDAS
 
@@ -156,8 +146,7 @@ class MainActivity : AppCompatActivity() {
         saludos[1] = arrayListOf("Hi", "Bye")
 
         //Desesctructuramos el MutableMap
-        for ((id, palabras) in saludos)
-            println("$id, ${palabras}")
+        for ((id, palabras) in saludos) println("$id, ${palabras}")
 
 
         //DESESTRUCTURACION
@@ -199,14 +188,65 @@ class MainActivity : AppCompatActivity() {
         println("Resultado catch: $resultadoCatch")
 
 
-        //Throw exceptions
-        var password:String = "1234"
-        if (password.length<6){
+        /*Throw exceptions
+        var password: String = "1234"
+        if (password.length < 6) {
             throw IllegalPasswordException("Password muy corta")
-        }
-        else
-            println("Password segura")
+        } else println("Password segura")
+        */
 
+        //SCOPE FUNCTIONS
+
+
+        var persona: Person = Person()
+
+        // De esta forma con la función let , podemos acceder a los atributos,métodos de la clase Person pero de una forma mas legible y estructurada
+        persona.let {
+            it.name = "Ernesto"
+            it.passport = "B182831"
+            it.die()
+
+        }
+        // De esta forma con la función apply , podemos acceder a los atributos,métodos de la clase Person pero de una forma mas legible y estructurada
+        persona.apply {
+            this.name = "Juanjo"
+            this.passport = "B129321"
+            this.die()
+        }
+
+        //También podemos combinarlo a la hora de instanciar un objeto con el método despues del igualamiento de la clase y su constructor, en este caso tenemos un constructor que sus atributos se inicializan
+        //en null nada más se crea el objeto, si no habría que meter si o sí los parametros dentro del constructor
+        var persona2: Person = Person().apply {
+            this.name = "Pedro"
+            this.passport = "E921312"
+            this.die()
+        }
+            .also {// Esto es para tambíen añadir o ejecutar algun método que se especifique o sea necesario
+                it.height = 1.85f
+            }
+
+        //En este ejemplo con el método run y with , debemos poner Unit al tipo de la variable o no especificarlo para poder operar con el, no se guardan la asignacion de los atributos en la variable,
+        // pero si se ejecuta. Se guarda al final lo que especifiquemos por ejemplo, aqui se guardara un String ( si no especificamos la variable como Unit(void))
+        var persona3 = Person().run {
+            this.name = "María"
+            this.passport = "K231231"
+            this.die()
+
+            "Nombre: ${this.name}, Pasaporte: ${this.passport}"
+        }
+
+        var persona4 = with(Person()) {
+            this.name = "Marta"
+            this.passport = "Ñ323123"
+            this.die()
+
+            "Nombre: ${this.name}, Pasaporte: ${this.passport}"
+        }
+
+        //No podemos mostrar los atributos de las personas 3 y 4 pero sí podemos mostrar el mensaje que hemos almacenado en la variable accediendo a esos
+        // atributos que hemos definido en la declaracion de la variable
+        println(persona3)
+        println(persona4)
     }
 
     private fun recorrerArray2(letras: Array<Char>, function: (Char) -> Unit) {
@@ -291,7 +331,8 @@ class MainActivity : AppCompatActivity() {
         }
         return res
     }
-    class IllegalPasswordException(message:String):Exception(message){
+
+    class IllegalPasswordException(message: String) : Exception(message) {
 
     }
 

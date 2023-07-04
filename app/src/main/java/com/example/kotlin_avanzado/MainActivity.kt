@@ -3,7 +3,14 @@ package com.example.kotlin_avanzado
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
+//Esto es un alias para ahorrarnos el escribir toda la estructura de esta colección de tipo MutableMap, objetos o funciones
+typealias aliasObjeto = Person
+typealias aliasDato = MutableMap<Int, ArrayList<String>>
+typealias aliasFuncion = (a: Int, b: Int) -> Int
+
 class MainActivity : AppCompatActivity() {
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -125,6 +132,7 @@ class MainActivity : AppCompatActivity() {
         var array7: IntArray = IntArray(10) { i -> i * 3 }
         println("Array7: "); array7.show();
 
+
         var suma = 0
 
         recorrerArray(array7) {
@@ -141,6 +149,36 @@ class MainActivity : AppCompatActivity() {
             frase += it
         }
         println(frase)
+
+        //Creamos una coleccion de MutableMap que hemos definidio arriba con el alias
+        var saludos: aliasDato = mutableMapOf()
+        saludos[0] = arrayListOf("Hola", "Adios")
+        saludos[1] = arrayListOf("Hi", "Bye")
+
+        //Desesctructuramos el MutableMap
+        for ((id, palabras) in saludos)
+            println("$id, ${palabras}")
+
+
+
+        //DESESTRUCTURACION
+        var star: Star = Star("Sol", 12013012f, "Via lactea")
+
+        //Recogemos en esta estructura de variables los parametros de la data class Star (por orden)
+        var (star_name2, star_radius2, star_galaxy2) = Star("Sol2", 12013012f, "Via lactea2")
+        println("Star 2 desestructurada $star_name2 , $star_radius2, $star_galaxy2")
+
+        //En este caso cogemos solo el primero y el segundo parametro en esas dos variables definidas
+        var (star_name3, star_radius3) = Star("Sol3", 12013012f, "Via lactea3")
+        println("Star 3 desestructurada $star_name3 , $star_radius3")
+
+        //En este caso solo cogemos el primero y el ultimo, para no reservar espacio en la memoria el dato de en medio lo definimos con un guión bajo
+        var (star_name4, _, star_galaxy4) = Star("Sol4", 12013012f, "Via lactea4")
+        println("Star 4 desestructurada $star_name4 , $star_galaxy4")
+
+        //Con este método podemos acceder desde una variable a los datos que queramos
+        var componente = Star("Sol5", 12013012f, "Via lactea5")
+        println("Star 5 con Componentes ${componente.component1()}, ${componente.component3()}, ${componente.component2()}")
 
 
     }
@@ -219,3 +257,4 @@ class MainActivity : AppCompatActivity() {
     }
 
 }
+

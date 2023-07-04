@@ -160,7 +160,6 @@ class MainActivity : AppCompatActivity() {
             println("$id, ${palabras}")
 
 
-
         //DESESTRUCTURACION
         var star: Star = Star("Sol", 12013012f, "Via lactea")
 
@@ -180,6 +179,33 @@ class MainActivity : AppCompatActivity() {
         var componente = Star("Sol5", 12013012f, "Via lactea5")
         println("Star 5 con Componentes ${componente.component1()}, ${componente.component3()}, ${componente.component2()}")
 
+
+        /*
+         EXCEPCIONES
+
+
+        Los 4 errores más comunes que suelen aparecer
+
+            NullPointerExecption ==>Apuntar a un objeto que esta en estado null
+            ArithmeticException ==> Realizar una operación imposible, como dividir entre 0
+            SecurityException ==> Intentar escribir sobre un archivo sin permisos de escritura
+            ArrayIndexOutOfBoundException ==>Intentar acceder a un indice no existente de un Array
+
+         */
+
+        var resultadoTry = value_try(10, 2)
+        println("Resultado try: $resultadoTry")
+        var resultadoCatch = value_try(10, 0)
+        println("Resultado catch: $resultadoCatch")
+
+
+        //Throw exceptions
+        var password:String = "1234"
+        if (password.length<6){
+            throw IllegalPasswordException("Password muy corta")
+        }
+        else
+            println("Password segura")
 
     }
 
@@ -254,6 +280,19 @@ class MainActivity : AppCompatActivity() {
 
     private fun alturaSpain(altura: Float?): Boolean {
         return altura!! >= 1.65f
+    }
+
+    private fun value_try(n1: Int, n2: Int): Any {
+        var res = try {
+            println("Division entre $n1/$n2")
+            n1 / n2
+        } catch (e: ArithmeticException) {
+            "No se puede dividir entre 0"
+        }
+        return res
+    }
+    class IllegalPasswordException(message:String):Exception(message){
+
     }
 
 }
